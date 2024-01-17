@@ -1,0 +1,15 @@
+.outer-div{
+    width: 600px;
+    height: 600px;
+    background-color: rgb(222, 252, 252);
+    position: relative;
+    border: 1px solid black;
+}
+
+.inner-div{
+    width: 50px;
+    height: 50px;
+    background-color: blueviolet;
+    position: absolute;
+    cursor: move;
+}
