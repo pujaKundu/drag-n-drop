@@ -13,14 +13,7 @@ const Home = () => {
   const [dragging, setDragging] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
-  const [selectedOption,setSelectedOption]=useState('top')
-
-  console.log("position",position);
-  // console.log(dragging);
-  // console.log('set vis', tooltipVisible);
-
-  console.log(tooltipPosition)
-
+  const [selectedOption, setSelectedOption] = useState("top");
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -70,11 +63,7 @@ const Home = () => {
   };
 
   const handleMouseEnter = () => {
-    if (
-      !dragging &&
-      (position.x !== positionRef.current.x ||
-        position.y !== positionRef.current.y)
-    ) {
+    if (!dragging) {
       setTooltipVisible(true);
     }
 
@@ -88,8 +77,6 @@ const Home = () => {
 
     setIsInnerDivHovered(false);
   };
-
-  // style options
 
   const updatedPosition = () => {
     switch (selectedOption) {
@@ -132,12 +119,14 @@ const Home = () => {
             (containerRef?.current?.getBoundingClientRect()?.top || 0) +
             10
           }px`,
-          left:   `${
+          left: `${
             position.x >= 0 && position.x <= 110
               ? position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) + 120
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) +
+                120
               : position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) - 120
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) -
+                120
           }px`,
         };
       case "right":
@@ -147,12 +136,14 @@ const Home = () => {
             (containerRef?.current?.getBoundingClientRect()?.top || 0) +
             10
           }px`,
-          left:   `${
+          left: `${
             position.x >= 400 && position.x <= 505
               ? position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) - 120
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) -
+                120
               : position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) + 120
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) +
+                120
           }px`,
         };
       default:
@@ -178,7 +169,7 @@ const Home = () => {
         </div>,
         document.body
       )}
-      <Selector setSelectedOption={setSelectedOption}/>
+      <Selector setSelectedOption={setSelectedOption} />
       <div
         id="container"
         className="outer-div"

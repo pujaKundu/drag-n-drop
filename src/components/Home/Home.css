@@ -4,7 +4,7 @@
     background-color: rgb(222, 252, 252);
     position: relative;
     border: 1px solid black;
-    z-index: 0;
+    z-index: 100;
     
 }
 
@@ -14,13 +14,14 @@
     background-color: blueviolet;
     position: absolute;
     cursor: move;
-    z-index: 400;
+    z-index: 200;
 }
 
 .tooltip{
     position: fixed;
-    background-color: aliceblue;
+    background-color: rgb(37, 37, 38);
+    color: #ffffff;
     padding: 5px;
     border-radius: 5px;
-    z-index: 200;
+    z-index: 900;
 }
