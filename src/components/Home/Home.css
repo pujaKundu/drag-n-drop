@@ -3,9 +3,9 @@
     height: 650px;
     background-color: rgb(222, 252, 252);
     position: relative;
-    border: 1px solid black;
     z-index: 100;
-    
+    border-radius: 10px;
+    border: 1px solid rgb(191, 239, 250);
 }
 
 .inner-div{
@@ -25,3 +25,4 @@
     border-radius: 5px;
     z-index: 900;
 }
+

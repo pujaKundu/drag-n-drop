@@ -173,6 +173,7 @@ const Home = () => {
       <div
         id="container"
         className="outer-div"
+        style={{boxShadow:`${dragging?"2px 3px 20px rgb(36, 171, 201)": ""}`}}
         ref={containerRef}
         onMouseUp={handleMouseUp}
       >
