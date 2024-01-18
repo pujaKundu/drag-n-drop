@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
 import "./Home.css";
 
@@ -12,6 +13,7 @@ const Home = () => {
   const [dragging, setDragging] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
+  const [selectedOption,setSelectedOption]=useState('top')
 
   // console.log(position);
   // console.log(dragging);
@@ -114,6 +116,7 @@ const Home = () => {
         </div>,
         document.body
       )}
+      <Selector/>
       <div
         id="container"
         className="outer-div"
