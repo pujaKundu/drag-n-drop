@@ -1,15 +1,23 @@
 .outer-div{
     width: 600px;
-    height: 600px;
+    height: 650px;
     background-color: rgb(222, 252, 252);
     position: relative;
     border: 1px solid black;
+    
 }
 
 .inner-div{
-    width: 50px;
+    width: 100px;
     height: 50px;
     background-color: blueviolet;
     position: absolute;
     cursor: move;
+}
+
+.tooltip{
+    position: fixed;
+    background-color: aliceblue;
+    padding: 5px;
+    border-radius: 5px;
 }
