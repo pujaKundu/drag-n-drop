@@ -15,9 +15,12 @@ const Home = () => {
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
   const [selectedOption,setSelectedOption]=useState('top')
 
-  // console.log(position);
+  console.log("position",position);
   // console.log(dragging);
   // console.log('set vis', tooltipVisible);
+
+  console.log(tooltipPosition)
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -86,20 +89,79 @@ const Home = () => {
     setIsInnerDivHovered(false);
   };
 
+  // style options
+
+  const updatedPosition = () => {
+    switch (selectedOption) {
+      case "top":
+        return {
+          top: `${
+            position.y >= 0 && position.y <= 60
+              ? position.y +
+                (containerRef?.current?.getBoundingClientRect()?.top || 0) +
+                60
+              : position.y +
+                (containerRef?.current?.getBoundingClientRect()?.top || 0) -
+                40
+          }px`,
+          left: `${
+            position.x +
+            (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
+          }px`,
+        };
+      case "bottom":
+        return {
+          top: `${
+            position.y >= 550 && position.y <= 605
+              ? position.y +
+                (containerRef?.current?.getBoundingClientRect()?.top || 0) -
+                40
+              : position.y +
+                (containerRef?.current?.getBoundingClientRect()?.top || 0) +
+                60
+          }px`,
+          left: `${
+            position.x +
+            (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
+          }px`,
+        };
+      case "left":
+        return {
+          top: `${
+            position.y +
+            (containerRef?.current?.getBoundingClientRect()?.top || 0) +
+            10
+          }px`,
+          left:   `${
+            position.x >= 0 && position.x <= 110
+              ? position.x +
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) + 120
+              : position.x +
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) - 120
+          }px`,
+        };
+      case "right":
+        return {
+          top: `${
+            position.y +
+            (containerRef?.current?.getBoundingClientRect()?.top || 0) +
+            10
+          }px`,
+          left:   `${
+            position.x >= 400 && position.x <= 505
+              ? position.x +
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) - 120
+              : position.x +
+                (containerRef?.current?.getBoundingClientRect()?.left || 0) + 120
+          }px`,
+        };
+      default:
+        return {};
+    }
+  };
+
   const tooltipStyle = {
-    top: `${
-      position.y >= 0 && position.y <= 60
-        ? tooltipPosition.y +
-          (containerRef?.current?.getBoundingClientRect()?.top || 0) +
-          60
-        : tooltipPosition.y +
-          (containerRef?.current?.getBoundingClientRect()?.top || 0) -
-          40
-    }px`,
-    left: `${
-      tooltipPosition.x +
-      (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
-    }px`,
+    ...updatedPosition(),
     display: tooltipVisible && isInnerDivHovered ? "block" : "none",
   };
 
@@ -116,7 +178,7 @@ const Home = () => {
         </div>,
         document.body
       )}
-      <Selector/>
+      <Selector setSelectedOption={setSelectedOption}/>
       <div
         id="container"
         className="outer-div"
