@@ -1,12 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
+import {resizeHandler} from '../../utils/resizeHandler'
 import "./Home.css";
 
 const Home = () => {
   const containerRef = useRef(null);
   const innerDivRef = useRef(null);
   const positionRef = useRef({ x: 0, y: 0 });
+
+  const containerRefBottom = containerRef?.current?.getBoundingClientRect().bottom ;
+  const innerRefBottom = innerDivRef?.current?.getBoundingClientRect().bottom ;
+  const containerRefLeft = containerRef?.current?.getBoundingClientRect().left ;
+  const innerRefLeft = innerDivRef?.current?.getBoundingClientRect().left ;
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -15,6 +21,8 @@ const Home = () => {
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
   const [selectedOption, setSelectedOption] = useState("top");
 
+  console.log(position)
+  
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (dragging) {
@@ -99,7 +107,7 @@ const Home = () => {
       case "bottom":
         return {
           top: `${
-            position.y >= 550 && position.y <= 605
+            containerRefBottom - innerRefBottom <=100
               ? position.y +
                 (containerRef?.current?.getBoundingClientRect()?.top || 0) -
                 40
@@ -173,7 +181,11 @@ const Home = () => {
       <div
         id="container"
         className="outer-div"
-        style={{boxShadow:`${dragging?"2px 3px 20px rgb(36, 171, 201)": ""}`}}
+        style={{
+          boxShadow: `${dragging ? "2px 3px 20px rgb(36, 171, 201)" : ""}`,
+          minWidth: "300px",
+          minHeight: "300px",
+        }}
         ref={containerRef}
         onMouseUp={handleMouseUp}
       >
@@ -184,6 +196,15 @@ const Home = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           ref={innerDivRef}
+        ></div>
+        {/* Resize handles */}
+        <div
+          className="resize-handle right-resize"
+          onMouseDown={(e) => resizeHandler(e, "right", containerRef,innerDivRef)}
+        ></div>
+        <div
+          className="resize-handle bottom-resize"
+          onMouseDown={(e) => resizeHandler(e, "bottom", containerRef,innerDivRef)}
         ></div>
       </div>
     </>
