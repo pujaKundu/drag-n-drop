@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
 import {resizeHandler} from '../../utils/resizeHandler'
 import "./Home.css";
+import { handleDragContainer } from "../../utils/dragDrop";
+import dnd from "../../assets/drag.png"
 
 const Home = () => {
   const containerRef = useRef(null);
@@ -189,6 +191,20 @@ const Home = () => {
         ref={containerRef}
         onMouseUp={handleMouseUp}
       >
+        <img
+          src={dnd}
+          style={{
+            height: "20px",
+            width: "20px",
+            position: "absolute",
+            right: "5px",
+            top: "5px",
+            cursor:"grab"
+          }}
+          onMouseDown={(e) => handleDragContainer(e, containerRef)}
+        />
+          
+       
         <div
           className="inner-div"
           style={{ top: `${position.y}px`, left: `${position.x}px` }}
@@ -200,11 +216,15 @@ const Home = () => {
         {/* Resize handles */}
         <div
           className="resize-handle right-resize"
-          onMouseDown={(e) => resizeHandler(e, "right", containerRef,innerDivRef)}
+          onMouseDown={(e) =>
+            resizeHandler(e, "right", containerRef, innerDivRef)
+          }
         ></div>
         <div
           className="resize-handle bottom-resize"
-          onMouseDown={(e) => resizeHandler(e, "bottom", containerRef,innerDivRef)}
+          onMouseDown={(e) =>
+            resizeHandler(e, "bottom", containerRef, innerDivRef)
+          }
         ></div>
       </div>
     </>
