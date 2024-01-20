@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
 import { resizeHandler } from "../../utils/resizeHandler";
@@ -11,7 +11,6 @@ import Tooltip from "../Tooltip/Tooltip";
 const Home = () => {
   const containerRef = useRef(null);
   const innerDivRef = useRef(null);
-  const positionRef = useRef({ x: 0, y: 0 });
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -19,37 +18,23 @@ const Home = () => {
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
   const [selectedOption, setSelectedOption] = useState("top");
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (dragging) {
-        const containerRect = containerRef.current?.getBoundingClientRect();
+  const handleMouseMove = (e) => {
+    if (dragging) {
+      const containerRect = containerRef.current?.getBoundingClientRect();
 
-        if (containerRect) {
-          const newX = e.clientX - containerRect.left - 25;
-          const newY = e.clientY - containerRect.top - 25;
+      if (containerRect) {
+        const newX = e.clientX - containerRect.left - 25;
+        const newY = e.clientY - containerRect.top - 25;
 
-          const clampedX = Math.max(
-            0,
-            Math.min(newX, containerRect.width - 100)
-          );
-          const clampedY = Math.max(
-            0,
-            Math.min(newY, containerRect.height - 50)
-          );
+        const clampedX = Math.max(0, Math.min(newX, containerRect.width - 100));
+        const clampedY = Math.max(0, Math.min(newY, containerRect.height - 50));
 
-          setPosition({ x: clampedX, y: clampedY });
-        }
-
-        setTooltipVisible(false);
+        setPosition({ x: clampedX, y: clampedY });
       }
-    };
 
-    document.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [dragging]);
+      setTooltipVisible(false);
+    }
+  };
 
   const handleMouseDown = () => {
     setDragging(true);
@@ -73,22 +58,13 @@ const Home = () => {
     if (!dragging) {
       setTooltipVisible(false);
     }
-
     setIsInnerDivHovered(false);
   };
 
   const handleCornerMouseDown = (e) => {
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    const offsetX = e.clientX - containerRect.left;
-    const offsetY = e.clientY - containerRect.top;
-
-    positionRef.current = { x: offsetX, y: offsetY };
-
     resizeHandler(e, "right", containerRef, innerDivRef);
     resizeHandler(e, "bottom", containerRef, innerDivRef);
   };
-
-  console.table(position);
 
   return (
     <>
@@ -115,6 +91,7 @@ const Home = () => {
           minHeight: "300px",
         }}
         ref={containerRef}
+        onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
         <img
@@ -129,7 +106,6 @@ const Home = () => {
             margin: "5px",
           }}
           onMouseDown={handleCornerMouseDown}
-          onMouseUp={handleMouseUp}
         />
         <img
           src={dnd}
