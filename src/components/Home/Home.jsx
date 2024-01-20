@@ -5,6 +5,7 @@ import {resizeHandler} from '../../utils/resizeHandler'
 import "./Home.css";
 import { handleDragContainer } from "../../utils/dragDrop";
 import dnd from "../../assets/drag.png"
+import resize from '../../assets/resize.png'
 
 const Home = () => {
   const containerRef = useRef(null);
@@ -88,6 +89,18 @@ const Home = () => {
     setIsInnerDivHovered(false);
   };
 
+   const handleCornerMouseDown = (e) => {
+   
+     const containerRect = containerRef.current?.getBoundingClientRect();
+     const offsetX = e.clientX - containerRect.left;
+     const offsetY = e.clientY - containerRect.top;
+
+     positionRef.current = { x: offsetX, y: offsetY };
+
+     resizeHandler(e, "right", containerRef, innerDivRef);
+     resizeHandler(e, "bottom", containerRef, innerDivRef);
+   };
+
   const updatedPosition = () => {
     switch (selectedOption) {
       case "top":
@@ -166,6 +179,7 @@ const Home = () => {
     display: tooltipVisible && isInnerDivHovered ? "block" : "none",
   };
 
+
   return (
     <>
       {createPortal(
@@ -191,6 +205,19 @@ const Home = () => {
         ref={containerRef}
         onMouseUp={handleMouseUp}
       >
+         <img src={resize}
+        style={{
+          height: "15px",
+          width: "15px",
+          position: "absolute",
+          bottom: "0",
+          right: "0",
+          cursor: "se-resize",
+          margin:'5px'
+        }}
+        onMouseDown={handleCornerMouseDown}
+        onMouseUp={handleMouseUp}
+      />
         <img
           src={dnd}
           style={{
@@ -199,20 +226,11 @@ const Home = () => {
             position: "absolute",
             right: "5px",
             top: "5px",
-            cursor:"grab"
+            cursor: "grab",
           }}
           onMouseDown={(e) => handleDragContainer(e, containerRef)}
         />
-          
-       
-        <div
-          className="inner-div"
-          style={{ top: `${position.y}px`, left: `${position.x}px` }}
-          onMouseDown={handleMouseDown}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          ref={innerDivRef}
-        ></div>
+
         {/* Resize handles */}
         <div
           className="resize-handle right-resize"
@@ -225,6 +243,15 @@ const Home = () => {
           onMouseDown={(e) =>
             resizeHandler(e, "bottom", containerRef, innerDivRef)
           }
+        ></div>
+
+        <div
+          className="inner-div"
+          style={{ top: `${position.y}px`, left: `${position.x}px` }}
+          onMouseDown={handleMouseDown}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          ref={innerDivRef}
         ></div>
       </div>
     </>
