@@ -1,31 +1,24 @@
-import  { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
-import {resizeHandler} from '../../utils/resizeHandler'
+import { resizeHandler } from "../../utils/resizeHandler";
 import "./Home.css";
 import { handleDragContainer } from "../../utils/dragDrop";
-import dnd from "../../assets/drag.png"
-import resize from '../../assets/resize.png'
+import dnd from "../../assets/drag.png";
+import resize from "../../assets/resize.png";
+import Tooltip from "../Tooltip/Tooltip";
 
 const Home = () => {
   const containerRef = useRef(null);
   const innerDivRef = useRef(null);
   const positionRef = useRef({ x: 0, y: 0 });
 
-  const containerRefBottom = containerRef?.current?.getBoundingClientRect().bottom ;
-  const innerRefBottom = innerDivRef?.current?.getBoundingClientRect().bottom ;
-  const containerRefLeft = containerRef?.current?.getBoundingClientRect().left ;
-  const innerRefLeft = innerDivRef?.current?.getBoundingClientRect().left ;
-
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
   const [selectedOption, setSelectedOption] = useState("top");
 
-  console.log(position)
-  
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (dragging) {
@@ -65,10 +58,6 @@ const Home = () => {
 
   const handleMouseUp = () => {
     setDragging(false);
-    const newPosition = { x: position.x, y: position.y };
-    setTooltipPosition(newPosition);
-    positionRef.current = newPosition;
-
     setTooltipVisible(true);
     setIsInnerDivHovered(true);
   };
@@ -77,7 +66,6 @@ const Home = () => {
     if (!dragging) {
       setTooltipVisible(true);
     }
-
     setIsInnerDivHovered(true);
   };
 
@@ -89,108 +77,32 @@ const Home = () => {
     setIsInnerDivHovered(false);
   };
 
-   const handleCornerMouseDown = (e) => {
-   
-     const containerRect = containerRef.current?.getBoundingClientRect();
-     const offsetX = e.clientX - containerRect.left;
-     const offsetY = e.clientY - containerRect.top;
+  const handleCornerMouseDown = (e) => {
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    const offsetX = e.clientX - containerRect.left;
+    const offsetY = e.clientY - containerRect.top;
 
-     positionRef.current = { x: offsetX, y: offsetY };
+    positionRef.current = { x: offsetX, y: offsetY };
 
-     resizeHandler(e, "right", containerRef, innerDivRef);
-     resizeHandler(e, "bottom", containerRef, innerDivRef);
-   };
-
-  const updatedPosition = () => {
-    switch (selectedOption) {
-      case "top":
-        return {
-          top: `${
-            position.y >= 0 && position.y <= 60
-              ? position.y +
-                (containerRef?.current?.getBoundingClientRect()?.top || 0) +
-                60
-              : position.y +
-                (containerRef?.current?.getBoundingClientRect()?.top || 0) -
-                40
-          }px`,
-          left: `${
-            position.x +
-            (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
-          }px`,
-        };
-      case "bottom":
-        return {
-          top: `${
-            containerRefBottom - innerRefBottom <=100
-              ? position.y +
-                (containerRef?.current?.getBoundingClientRect()?.top || 0) -
-                40
-              : position.y +
-                (containerRef?.current?.getBoundingClientRect()?.top || 0) +
-                60
-          }px`,
-          left: `${
-            position.x +
-            (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
-          }px`,
-        };
-      case "left":
-        return {
-          top: `${
-            position.y +
-            (containerRef?.current?.getBoundingClientRect()?.top || 0) +
-            10
-          }px`,
-          left: `${
-            position.x >= 0 && position.x <= 110
-              ? position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) +
-                120
-              : position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) -
-                120
-          }px`,
-        };
-      case "right":
-        return {
-          top: `${
-            position.y +
-            (containerRef?.current?.getBoundingClientRect()?.top || 0) +
-            10
-          }px`,
-          left: `${
-            position.x >= 400 && position.x <= 505
-              ? position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) -
-                120
-              : position.x +
-                (containerRef?.current?.getBoundingClientRect()?.left || 0) +
-                120
-          }px`,
-        };
-      default:
-        return {};
-    }
+    resizeHandler(e, "right", containerRef, innerDivRef);
+    resizeHandler(e, "bottom", containerRef, innerDivRef);
   };
 
-  const tooltipStyle = {
-    ...updatedPosition(),
-    display: tooltipVisible && isInnerDivHovered ? "block" : "none",
-  };
-
+  console.table(position);
 
   return (
     <>
       {createPortal(
-        <div
-          className={`tooltip `}
-          style={tooltipStyle}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          This is tooltip
-        </div>,
+        <Tooltip
+          handleMouseEnter={handleMouseEnter}
+          handleMouseLeave={handleMouseLeave}
+          selectedOption={selectedOption}
+          position={position}
+          containerRef={containerRef}
+          innerDivRef={innerDivRef}
+          tooltipVisible={tooltipVisible}
+          isInnerDivHovered={isInnerDivHovered}
+        />,
         document.body
       )}
       <Selector setSelectedOption={setSelectedOption} />
@@ -205,19 +117,20 @@ const Home = () => {
         ref={containerRef}
         onMouseUp={handleMouseUp}
       >
-         <img src={resize}
-        style={{
-          height: "15px",
-          width: "15px",
-          position: "absolute",
-          bottom: "0",
-          right: "0",
-          cursor: "se-resize",
-          margin:'5px'
-        }}
-        onMouseDown={handleCornerMouseDown}
-        onMouseUp={handleMouseUp}
-      />
+        <img
+          src={resize}
+          style={{
+            height: "15px",
+            width: "15px",
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+            cursor: "se-resize",
+            margin: "5px",
+          }}
+          onMouseDown={handleCornerMouseDown}
+          onMouseUp={handleMouseUp}
+        />
         <img
           src={dnd}
           style={{
@@ -231,7 +144,6 @@ const Home = () => {
           onMouseDown={(e) => handleDragContainer(e, containerRef)}
         />
 
-        {/* Resize handles */}
         <div
           className="resize-handle right-resize"
           onMouseDown={(e) =>

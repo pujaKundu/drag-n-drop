@@ -7,23 +7,33 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
 
   const handleMouseMove = (e) => {
     if (direction === "right") {
-      containerRef.current.style.width = e.clientX - containerRect.left + "px";
-    } else if (direction === "bottom") {
-      containerRef.current.style.height = e.clientY - containerRect.top + "px";
+      const newWidth = e.clientX - containerRect.left;
+      containerRef.current.style.width = `${newWidth}px`;
 
-      // Check if the inner div is positioned outside the container
-      if (innerDivRef.current && innerDivRect.bottom > containerBottom) {
-        const newBottomPosition = containerBottom - containerRect.top + "px";
-        innerDivRef.current.style.top = newBottomPosition;
+      if (containerRect.right <= innerDivRect.right) {
+        const innerBoxLeft = containerRect.width - innerDivRect.width;
+        innerDivRef.current.style.left = `${innerBoxLeft}px`;
+      }
+    } else if (direction === "bottom") {
+      const newHeight = e.clientY - containerRect.top;
+      containerRef.current.style.height = `${newHeight}px`;
+
+      if (innerDivRect.bottom > containerBottom) {
+        const newTopPosition =
+          containerBottom - containerRect.top - innerDivRect.height + "px";
+        innerDivRef.current.style.top = newTopPosition;
       }
     } else {
-      containerRef.current.style.width = e.clientX - containerRect.left + "px";
-      containerRef.current.style.height = e.clientY - containerRect.top + "px";
+      const newWidth = e.clientX - containerRect.left;
+      const newHeight = e.clientY - containerRect.top;
 
-      // Check if the inner div is positioned outside the container
-      if (innerDivRef.current && innerDivRect.bottom > containerBottom) {
-        const newBottomPosition = containerBottom - containerRect.top + "px";
-        innerDivRef.current.style.top = newBottomPosition;
+      containerRef.current.style.width = `${newWidth}px`;
+      containerRef.current.style.height = `${newHeight}px`;
+
+      if (innerDivRect.bottom > containerBottom) {
+        const newTopPosition =
+          containerBottom - containerRect.top - innerDivRect.height + "px";
+        innerDivRef.current.style.top = newTopPosition;
       }
     }
   };

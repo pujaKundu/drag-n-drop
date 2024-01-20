@@ -1,53 +1,49 @@
-.outer-div{
-    width: 600px;
-    height: 650px;
-    background-color: rgb(222, 252, 252);
-    position: relative;
-    z-index: 100;
-    border-radius: 10px;
-    border: 1px solid rgb(191, 239, 250);
-    overflow: hidden;
+.outer-div {
+  width: 600px;
+  height: 650px;
+  background-color: rgb(222, 252, 252);
+  position: relative;
+  z-index: 100;
+  border-radius: 10px;
+  border: 1px solid rgb(191, 239, 250);
+  overflow: hidden;
 }
 
-.inner-div{
-    width: 100px;
-    height: 50px;
-    background-color: blueviolet;
-    position: absolute;
-    cursor: move;
-    z-index: 200;
+.inner-div {
+  width: 100px;
+  height: 50px;
+  background-color: blueviolet;
+  position: absolute;
+  cursor: move;
+  z-index: 200;
 }
 
-.tooltip{
-    position: fixed;
-    background-color: rgb(72, 72, 82);
-    color: #ffffff;
-    padding: 5px;
-    border-radius: 5px;
-    z-index: 900;
+.tooltip {
+  position: fixed;
+  background-color: rgb(72, 72, 82);
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 900;
 }
 
 .resize-handle {
-    position: absolute;
-    width: 12px;
-    height: 15px;
-    background-color: #007bff; /* You can adjust the color */
-    
-  }
-  
-  .right-resize {
-    top: 50%;
-    right: 0;
-    transform: translate(50%, -50%);
-    cursor: ew-resize;
-  }
-  
-  .bottom-resize {
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 50%);
-    cursor: ns-resize;
-  }
+  position: absolute;
+  width: 12px;
+  height: 15px;
+  background-color: #007bff;
+}
 
- 
-  
+.right-resize {
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  cursor: ew-resize;
+}
+
+.bottom-resize {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  cursor: ns-resize;
+}
