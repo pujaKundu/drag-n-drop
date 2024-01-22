@@ -25,6 +25,7 @@ const Tooltip = ({
     ),
     display: tooltipVisible && isInnerDivHovered ? "block" : "none",
   };
+  
   return (
     <div
       className={`tooltip `}

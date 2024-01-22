@@ -5,37 +5,61 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
   const innerDivRect = innerDivRef.current.getBoundingClientRect();
   const containerBottom = containerRect.bottom;
 
+  const container = document.getElementById("container")
+
+  console.log(container?.current?.getBoundingClientRect().left)
+
   const handleMouseMove = (e) => {
+
     if (direction === "right") {
-      const newWidth = e.clientX - containerRect.left;
-      containerRef.current.style.width = `${newWidth}px`;
+        const newWidth = e.clientX - containerRect.left;
 
-      if (containerRect.right <= innerDivRect.right) {
-        const innerBoxLeft = containerRect.width - innerDivRect.width;
-        innerDivRef.current.style.left = `${innerBoxLeft}px`;
+        containerRef.current.style.width = `${newWidth}px`;
+
+        if (containerRect.right <= innerDivRect.right) {
+          const innerBoxLeft = containerRect.width - innerDivRect.width;
+          innerDivRef.current.style.left = innerBoxLeft;
+        }
+    } 
+    else if (direction === "left") {
+      const newWidth = containerRect.right - e.clientX;
+
+        containerRef.current.style.width = `${newWidth}px`;
+
+      if (newWidth >= innerDivRect.width) {
+        containerRef.current.style.width = newWidth + "px";
+        containerRef.current.style.left = `${e.clientX}px`;
       }
-    } else if (direction === "bottom") {
+      if (containerRect.left === innerDivRect.left) {
+        const innerBoxLeft = containerRect.width - newWidth;
+        innerDivRef.current.style.left = innerBoxLeft + "px";
+      }
+    } 
+
+    else if (direction === "bottom") {
       const newHeight = e.clientY - containerRect.top;
       containerRef.current.style.height = `${newHeight}px`;
-
+      
       if (innerDivRect.bottom > containerBottom) {
         const newTopPosition =
           containerBottom - containerRect.top - innerDivRect.height + "px";
         innerDivRef.current.style.top = newTopPosition;
       }
-    } else {
-      const newWidth = e.clientX - containerRect.left;
-      const newHeight = e.clientY - containerRect.top;
+    } 
+    else if (direction === "top") {
+      const newHeight = containerBottom - e.clientY;
 
-      containerRef.current.style.width = `${newWidth}px`;
-      containerRef.current.style.height = `${newHeight}px`;
+      if (containerRect.bottom >= innerDivRect.bottom) {
+        containerRef.current.style.height = newHeight + "px";
+        containerRef.current.style.top = `${e.clientY}px`;
 
-      if (innerDivRect.bottom > containerBottom) {
-        const newTopPosition =
-          containerBottom - containerRect.top - innerDivRect.height + "px";
-        innerDivRef.current.style.top = newTopPosition;
+        if (containerRect.top === innerDivRect.top) {
+          const innerBoxTop = containerRect.height - newHeight;
+          innerDivRef.current.style.top = innerBoxTop + "px";
+        }
       }
     }
+    
   };
 
   const handleMouseUp = () => {
@@ -46,3 +70,4 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mouseup", handleMouseUp);
 };
+

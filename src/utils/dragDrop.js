@@ -24,21 +24,45 @@ export const handleDragContainer = (e, containerRef) => {
   }
 };
 
+export const handleDragInnerDiv = (
+  e,
+  innerDivRef,
+  containerRef,
+  setTooltipVisible,
+  setPosition
+) => {
+  e.preventDefault();
+  setTooltipVisible(false);
 
-export const handleInnerDivDrag = (e,dragging,containerRef,setPosition,setTooltipVisible) => {
-  if (dragging) {
-    const containerRect = containerRef.current?.getBoundingClientRect();
+  let offsetX, offsetY;
 
-    if (containerRect) {
-      const newX = e.clientX - containerRect.left - 25;
-      const newY = e.clientY - containerRect.top - 25;
+  offsetX = e.clientX - innerDivRef.current.getBoundingClientRect().left;
+  offsetY = e.clientY - innerDivRef.current.getBoundingClientRect().top;
 
-      const clampedX = Math.max(0, Math.min(newX, containerRect.width - 100));
-      const clampedY = Math.max(0, Math.min(newY, containerRect.height - 50));
-
-      setPosition({ x: clampedX, y: clampedY });
-    }
-
+  const handleDragMove = (e) => {
+    e.preventDefault();
     setTooltipVisible(false);
-  }
+
+    const containerRect = containerRef.current.getBoundingClientRect(null);
+    const innerDivRect = innerDivRef.current.getBoundingClientRect(null);
+    if (innerDivRef.current && containerRef.current) {
+      let x = e.clientX - offsetX - containerRect.left;
+      let y = e.clientY - offsetY - containerRect.top;
+
+      x = Math.max(0, Math.min(containerRect.width - innerDivRect.width, x));
+      y = Math.max(0, Math.min(containerRect.height - innerDivRect.height, y));
+
+      innerDivRef.current.style.left = x + "px";
+      innerDivRef.current.style.top = y + "px";
+
+      setPosition({ x: x, y: y });
+    }
+  };
+  const handleDragEnd = () => {
+    document.removeEventListener("mousemove", handleDragMove);
+    document.removeEventListener("mouseup", handleDragEnd);
+  };
+
+  document.addEventListener("mousemove", handleDragMove);
+  document.addEventListener("mouseup", handleDragEnd);
 };

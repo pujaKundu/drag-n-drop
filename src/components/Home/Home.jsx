@@ -3,8 +3,8 @@ import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
 import { resizeHandler } from "../../utils/resizeHandler";
 import "./Home.css";
-import { handleDragContainer ,handleInnerDivDrag} from "../../utils/dragDrop";
-import {handleMouseDown,handleMouseUp,handleMouseEnter,handleMouseLeave} from "../../utils/mouseEvents"
+import { handleDragContainer ,handleDragInnerDiv} from "../../utils/dragDrop";
+import {handleMouseUp,handleMouseEnter,handleMouseLeave} from "../../utils/mouseEvents"
 import dnd from "../../assets/drag.png";
 import resize from "../../assets/resize.png";
 import Tooltip from "../Tooltip/Tooltip";
@@ -25,7 +25,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div style={{position:'absolute',display:'flex',alignItems:'center',justifyContent:'center',top:'0',left:'0',margin:'20px'}}>
       {createPortal(
         <Tooltip
           handleMouseEnter={()=>handleMouseEnter(dragging,setTooltipVisible,setIsInnerDivHovered)}
@@ -39,7 +39,10 @@ const Home = () => {
         />,
         document.body
       )}
-      <Selector setSelectedOption={setSelectedOption} />
+      
+      <div >
+      <Selector setSelectedOption={setSelectedOption} 
+      />
       <div
         id="container"
         className="outer-div"
@@ -49,7 +52,6 @@ const Home = () => {
           minHeight: "300px",
         }}
         ref={containerRef}
-        onMouseMove={(e)=>handleInnerDivDrag(e,dragging,containerRef,setPosition,setTooltipVisible)}
         onMouseUp={()=>handleMouseUp(setDragging,setTooltipVisible,setIsInnerDivHovered)}
       >
         <img
@@ -91,15 +93,32 @@ const Home = () => {
           }
         ></div>
         <div
+          className="resize-handle left-resize"
+          onMouseDown={(e) =>
+            resizeHandler(e, "left", containerRef, innerDivRef)
+          }
+        ></div>
+        <div
+          className="resize-handle top-resize"
+          onMouseDown={(e) =>
+            resizeHandler(e, "top", containerRef, innerDivRef)
+          }
+        ></div>
+
+        <div
+        ref={innerDivRef}
           className="inner-div"
-          style={{ top: `${position.y}px`, left: `${position.x}px` }}
-          onMouseDown={()=>handleMouseDown(setDragging,setTooltipVisible)}
+          onMouseDown={(e)=>handleDragInnerDiv(e,innerDivRef,
+            containerRef,
+            setTooltipVisible,
+            setPosition)}
           onMouseEnter={()=>handleMouseEnter(dragging,setTooltipVisible,setIsInnerDivHovered)}
           onMouseLeave={()=>handleMouseLeave(dragging,setTooltipVisible,setIsInnerDivHovered)}
-          ref={innerDivRef}
         ></div>
       </div>
-    </>
+      </div>
+      
+    </div>
   );
 };
 
