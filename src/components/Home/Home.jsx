@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
-import { resizeHandler } from "../../utils/resizeHandler";
+import {
+  resizeHandler,
+  
+} from "../../utils/resizeHandler";
 import "./Home.css";
 import { handleDragContainer, handleDragInnerDiv } from "../../utils/dragDrop";
 import {
@@ -40,7 +43,7 @@ const Home = () => {
         margin: "20px",
       }}
     >
-      {createPortal(
+      {isInnerDivHovered && createPortal(
         <Tooltip
           handleMouseEnter={() =>
             handleMouseEnter(dragging, setTooltipVisible, setIsInnerDivHovered)
