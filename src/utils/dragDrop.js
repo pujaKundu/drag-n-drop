@@ -23,3 +23,22 @@ export const handleDragContainer = (e, containerRef) => {
     document.addEventListener("mouseup", handleMouseUp);
   }
 };
+
+
+export const handleInnerDivDrag = (e,dragging,containerRef,setPosition,setTooltipVisible) => {
+  if (dragging) {
+    const containerRect = containerRef.current?.getBoundingClientRect();
+
+    if (containerRect) {
+      const newX = e.clientX - containerRect.left - 25;
+      const newY = e.clientY - containerRect.top - 25;
+
+      const clampedX = Math.max(0, Math.min(newX, containerRect.width - 100));
+      const clampedY = Math.max(0, Math.min(newY, containerRect.height - 50));
+
+      setPosition({ x: clampedX, y: clampedY });
+    }
+
+    setTooltipVisible(false);
+  }
+};

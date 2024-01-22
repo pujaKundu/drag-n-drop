@@ -3,7 +3,8 @@ import Selector from "../Selector/Selector";
 import { createPortal } from "react-dom";
 import { resizeHandler } from "../../utils/resizeHandler";
 import "./Home.css";
-import { handleDragContainer } from "../../utils/dragDrop";
+import { handleDragContainer ,handleInnerDivDrag} from "../../utils/dragDrop";
+import {handleMouseDown,handleMouseUp,handleMouseEnter,handleMouseLeave} from "../../utils/mouseEvents"
 import dnd from "../../assets/drag.png";
 import resize from "../../assets/resize.png";
 import Tooltip from "../Tooltip/Tooltip";
@@ -18,50 +19,7 @@ const Home = () => {
   const [isInnerDivHovered, setIsInnerDivHovered] = useState(false);
   const [selectedOption, setSelectedOption] = useState("top");
 
-  const handleMouseMove = (e) => {
-    if (dragging) {
-      const containerRect = containerRef.current?.getBoundingClientRect();
-
-      if (containerRect) {
-        const newX = e.clientX - containerRect.left - 25;
-        const newY = e.clientY - containerRect.top - 25;
-
-        const clampedX = Math.max(0, Math.min(newX, containerRect.width - 100));
-        const clampedY = Math.max(0, Math.min(newY, containerRect.height - 50));
-
-        setPosition({ x: clampedX, y: clampedY });
-      }
-
-      setTooltipVisible(false);
-    }
-  };
-
-  const handleMouseDown = () => {
-    setDragging(true);
-    setTooltipVisible(false);
-  };
-
-  const handleMouseUp = () => {
-    setDragging(false);
-    setTooltipVisible(true);
-    setIsInnerDivHovered(true);
-  };
-
-  const handleMouseEnter = () => {
-    if (!dragging) {
-      setTooltipVisible(true);
-    }
-    setIsInnerDivHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (!dragging) {
-      setTooltipVisible(false);
-    }
-    setIsInnerDivHovered(false);
-  };
-
-  const handleCornerMouseDown = (e) => {
+  const handleCornerResize = (e) => {
     resizeHandler(e, "right", containerRef, innerDivRef);
     resizeHandler(e, "bottom", containerRef, innerDivRef);
   };
@@ -70,8 +28,8 @@ const Home = () => {
     <>
       {createPortal(
         <Tooltip
-          handleMouseEnter={handleMouseEnter}
-          handleMouseLeave={handleMouseLeave}
+          handleMouseEnter={()=>handleMouseEnter(dragging,setTooltipVisible,setIsInnerDivHovered)}
+          handleMouseLeave={()=>handleMouseLeave(dragging,setTooltipVisible,setIsInnerDivHovered)}
           selectedOption={selectedOption}
           position={position}
           containerRef={containerRef}
@@ -91,8 +49,8 @@ const Home = () => {
           minHeight: "300px",
         }}
         ref={containerRef}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        onMouseMove={(e)=>handleInnerDivDrag(e,dragging,containerRef,setPosition,setTooltipVisible)}
+        onMouseUp={()=>handleMouseUp(setDragging,setTooltipVisible,setIsInnerDivHovered)}
       >
         <img
           src={resize}
@@ -105,7 +63,7 @@ const Home = () => {
             cursor: "se-resize",
             margin: "5px",
           }}
-          onMouseDown={handleCornerMouseDown}
+          onMouseDown={handleCornerResize}
         />
         <img
           src={dnd}
@@ -132,13 +90,12 @@ const Home = () => {
             resizeHandler(e, "bottom", containerRef, innerDivRef)
           }
         ></div>
-
         <div
           className="inner-div"
           style={{ top: `${position.y}px`, left: `${position.x}px` }}
-          onMouseDown={handleMouseDown}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseDown={()=>handleMouseDown(setDragging,setTooltipVisible)}
+          onMouseEnter={()=>handleMouseEnter(dragging,setTooltipVisible,setIsInnerDivHovered)}
+          onMouseLeave={()=>handleMouseLeave(dragging,setTooltipVisible,setIsInnerDivHovered)}
           ref={innerDivRef}
         ></div>
       </div>
