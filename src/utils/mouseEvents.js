@@ -5,8 +5,8 @@ export const handleMouseDown = (setDragging,setTooltipVisible) => {
 
 export const handleMouseUp = (setDragging,setTooltipVisible,setIsInnerDivHovered) => {
     setDragging(false);
-    setTooltipVisible(true);
-    setIsInnerDivHovered(true);
+    setTooltipVisible(false);
+    setIsInnerDivHovered(false);
   };
 
 export const handleMouseEnter = (dragging,setTooltipVisible,setIsInnerDivHovered) => {

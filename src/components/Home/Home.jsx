@@ -1,9 +1,7 @@
 import { useState, useRef } from "react";
 import Selector from "../Selector/Selector";
-import { createPortal } from "react-dom";
 import {
   resizeHandler,
-  
 } from "../../utils/resizeHandler";
 import "./Home.css";
 import { handleDragContainer, handleDragInnerDiv } from "../../utils/dragDrop";
@@ -43,24 +41,7 @@ const Home = () => {
         margin: "20px",
       }}
     >
-      {isInnerDivHovered && createPortal(
-        <Tooltip
-          handleMouseEnter={() =>
-            handleMouseEnter(dragging, setTooltipVisible, setIsInnerDivHovered)
-          }
-          handleMouseLeave={() =>
-            handleMouseLeave(dragging, setTooltipVisible, setIsInnerDivHovered)
-          }
-          selectedOption={selectedOption}
-          position={position}
-          containerRef={containerRef}
-          innerDivRef={innerDivRef}
-          tooltipVisible={tooltipVisible}
-          isInnerDivHovered={isInnerDivHovered}
-        />,
-        document.body
-      )}
-
+      
       <div>
         <Selector setSelectedOption={setSelectedOption} />
         <div
@@ -157,6 +138,23 @@ const Home = () => {
           ></div>
         </div>
       </div>
+
+      {isInnerDivHovered && 
+        <Tooltip
+          handleMouseEnter={() =>
+            handleMouseEnter(dragging, setTooltipVisible, setIsInnerDivHovered)
+          }
+          handleMouseLeave={() =>
+            handleMouseLeave(dragging, setTooltipVisible, setIsInnerDivHovered)
+          }
+          selectedOption={selectedOption}
+          position={position}
+          containerRef={containerRef}
+          innerDivRef={innerDivRef}
+          tooltipVisible={tooltipVisible}
+          isInnerDivHovered={isInnerDivHovered}
+        />
+      }
     </div>
   );
 };

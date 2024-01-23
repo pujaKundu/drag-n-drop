@@ -1,11 +1,13 @@
-/* eslint-disable no-case-declarations */
 export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
   e.preventDefault();
 
+  const initialContainerRect = containerRef?.current.getBoundingClientRect();
+  const initialInnerDivRect = innerDivRef?.current.getBoundingClientRect();
+
   const handleMouseMove = (e) => {
+
     const containerRect = containerRef?.current.getBoundingClientRect();
     const innerDivRect = innerDivRef?.current.getBoundingClientRect();
-    const containerBottom = containerRect.bottom;
 
     switch (direction) {
       case "right":
@@ -21,11 +23,11 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
         break;
 
       case "left":
-        const newWidth = containerRect.right - e.clientX;
 
-        containerRef.current.style.width = `${newWidth}px`;
+        const newWidth = initialContainerRect.right - e.clientX;
+        // containerRef.current.style.width = `${newWidth}px`;
 
-        if (newWidth >= innerDivRect.width && newWidth >= 300) {
+        if (newWidth >= innerDivRect.width && newWidth>=300) {
           containerRef.current.style.width = newWidth + "px";
           containerRef.current.style.left = `${e.clientX}px`;
         }
@@ -50,9 +52,9 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
         break;
 
       case "top":
-        const newHeight = containerBottom - e.clientY;
+        const newHeight = initialContainerRect.bottom - e.clientY;
 
-        if (containerRect.bottom >= innerDivRect.bottom && newHeight >= 300) {
+        if (initialContainerRect.bottom >= innerDivRect.bottom && newHeight >= 300) {
           containerRef.current.style.height = newHeight + "px";
           containerRef.current.style.top = `${e.clientY}px`;
 
@@ -65,9 +67,9 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
 
       default:
         containerRef.current.style.width =
-          e.clientX - containerRef.current.getBoundingClientRect().left + "px";
+          e.clientX - containerRect.left + "px";
         containerRef.current.style.height =
-          e.clientY - containerRef.current.getBoundingClientRect().top + "px";
+          e.clientY - containerRect.top + "px";
 
         if (containerRect.right <= innerDivRect.right) {
           const innerBoxLeft = containerRect.width - innerDivRect.width;
@@ -90,3 +92,4 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mouseup", handleMouseUp);
 };
+

@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import { createPortal } from "react-dom";
 import { updatedPosition } from "../../utils/positionCalculation";
 
 const Tooltip = ({
@@ -23,18 +23,18 @@ const Tooltip = ({
       containerRefBottom,
       innerRefBottom
     ),
-    display: tooltipVisible && isInnerDivHovered ? "block" : "none",
+    display:  isInnerDivHovered ? "block" : "none",
   };
   
   return (
-    <div
+    createPortal(<div
       className={`tooltip `}
       style={tooltipStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       This is tooltip
-    </div>
+    </div>,document.body)
   );
 };
 
