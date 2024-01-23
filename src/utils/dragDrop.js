@@ -36,15 +36,16 @@ export const handleDragInnerDiv = (
 
   let offsetX, offsetY;
 
+  const containerRect = containerRef.current.getBoundingClientRect();
+  const innerDivRect = innerDivRef.current.getBoundingClientRect();
+
   offsetX = e.clientX - innerDivRef.current.getBoundingClientRect().left;
   offsetY = e.clientY - innerDivRef.current.getBoundingClientRect().top;
 
   const handleDragMove = (e) => {
     e.preventDefault();
     setTooltipVisible(false);
-
-    const containerRect = containerRef.current.getBoundingClientRect(null);
-    const innerDivRect = innerDivRef.current.getBoundingClientRect(null);
+    
     if (innerDivRef.current && containerRef.current) {
       let x = e.clientX - offsetX - containerRect.left;
       let y = e.clientY - offsetY - containerRect.top;
@@ -58,6 +59,9 @@ export const handleDragInnerDiv = (
       setPosition({ x: x, y: y });
     }
   };
+
+  
+
   const handleDragEnd = () => {
     document.removeEventListener("mousemove", handleDragMove);
     document.removeEventListener("mouseup", handleDragEnd);

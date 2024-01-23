@@ -25,7 +25,6 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
       case "left":
 
         const newWidth = initialContainerRect.right - e.clientX;
-        // containerRef.current.style.width = `${newWidth}px`;
 
         if (newWidth >= innerDivRect.width && newWidth>=300) {
           containerRef.current.style.width = newWidth + "px";
@@ -39,6 +38,7 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
           );
           innerDivRef.current.style.left = innerBoxLeft + "px";
         }
+        
         break;
 
       case "bottom":
