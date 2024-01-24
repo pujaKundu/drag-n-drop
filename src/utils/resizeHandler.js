@@ -1,8 +1,25 @@
-export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
+import { useState } from "react";
+
+export const resizeHandler = (e, direction, containerRef, innerDivRef,setPosition,position) => {
   e.preventDefault();
+
+  // console.log(position)
 
   const initialContainerRect = containerRef?.current.getBoundingClientRect();
   const initialInnerDivRect = innerDivRef?.current.getBoundingClientRect();
+
+  const debounce = (func, wait) => {
+    let timeout;
+
+    return function () {
+      if(timeout){
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(()=>{
+        func()
+      },wait)
+    };
+  };
 
   const handleMouseMove = (e) => {
 
@@ -23,20 +40,19 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
         break;
 
       case "left":
-
         const newWidth = initialContainerRect.right - e.clientX;
-
-        if (newWidth >= innerDivRect.width && newWidth>=300) {
+        
+        if (newWidth >= innerDivRect.width && newWidth>=100) {
           containerRef.current.style.width = newWidth + "px";
-          containerRef.current.style.left = `${e.clientX}px`;
+          containerRef.current.style.left = `${e.clientX}px`  
         }
 
-        if (containerRect.left === innerDivRect.left) {
-          const innerBoxLeft = Math.min(
-            containerRect.width - innerDivRect.width,
-            containerRect.width - newWidth
-          );
-          innerDivRef.current.style.left = innerBoxLeft + "px";
+        if (containerRect.left <= innerDivRect.left ) {
+          // console.log('left',position)
+          debounce(setPosition(prevItem => ({
+            ...prevItem,
+            x: Math.max(0,prevItem.x-e.movementX)
+          })),5000)
         }
         
         break;
@@ -54,15 +70,19 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef) => {
       case "top":
         const newHeight = initialContainerRect.bottom - e.clientY;
 
-        if (initialContainerRect.bottom >= innerDivRect.bottom && newHeight >= 300) {
+        if (initialContainerRect.bottom >= innerDivRect.bottom && newHeight >= 100) {
           containerRef.current.style.height = newHeight + "px";
           containerRef.current.style.top = `${e.clientY}px`;
-
-          if (containerRect.top === innerDivRect.top) {
-            const innerBoxTop = containerRect.height - newHeight;
-            innerDivRef.current.style.top = innerBoxTop + "px";
-          }
         }
+
+        if (containerRect.top <= innerDivRect.top) {
+          // console.log('left',position)
+          debounce(setPosition(prevItem=>({
+            ...prevItem,
+            y:Math.max(0,prevItem.y-e.movementY)
+          })),5000)
+        }
+        
         break;
 
       default:

@@ -7,14 +7,14 @@
   background-color: rgb(222, 252, 252);
   position: fixed;
   z-index: 100;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   border: 1px solid rgb(191, 239, 250);
   overflow: hidden;
 }
 
 .inner-div {
   width: 100px;
-  height: 50px;
+  height: 100px;
   background-color: blueviolet;
   position: absolute;
   cursor: grab;
@@ -32,8 +32,8 @@
 
 .resize-handle {
   position: absolute;
-  width: 12px;
-  height: 15px;
+  width: 32px;
+  height: 25px;
   background-color: #007bff;
 }
 

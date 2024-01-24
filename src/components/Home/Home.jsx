@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
 import Selector from "../Selector/Selector";
-import {
-  resizeHandler,
-} from "../../utils/resizeHandler";
+import { resizeHandler } from "../../utils/resizeHandler";
 import "./Home.css";
 import { handleDragContainer, handleDragInnerDiv } from "../../utils/dragDrop";
 import {
@@ -41,7 +39,6 @@ const Home = () => {
         margin: "20px",
       }}
     >
-      
       <div>
         <Selector setSelectedOption={setSelectedOption} />
         <div
@@ -49,8 +46,8 @@ const Home = () => {
           className="outer-div"
           style={{
             boxShadow: `${dragging ? "2px 3px 20px rgb(36, 171, 201)" : ""}`,
-            minWidth: "300px",
-            minHeight: "300px",
+            minWidth: "100px",
+            minHeight: "100px",
           }}
           ref={containerRef}
           onMouseUp={() =>
@@ -86,25 +83,53 @@ const Home = () => {
           <div
             className="resize-handle right-resize"
             onMouseDown={(e) =>
-              resizeHandler(e, "right", containerRef, innerDivRef)
+              resizeHandler(
+                e,
+                "right",
+                containerRef,
+                innerDivRef,
+                setPosition,
+                position
+              )
             }
           ></div>
           <div
             className="resize-handle bottom-resize"
             onMouseDown={(e) =>
-              resizeHandler(e, "bottom", containerRef, innerDivRef)
+              resizeHandler(
+                e,
+                "bottom",
+                containerRef,
+                innerDivRef,
+                setPosition,
+                position
+              )
             }
           ></div>
           <div
             className="resize-handle left-resize"
             onMouseDown={(e) =>
-              resizeHandler(e, "left", containerRef, innerDivRef)
+              resizeHandler(
+                e,
+                "left",
+                containerRef,
+                innerDivRef,
+                setPosition,
+                position
+              )
             }
           ></div>
           <div
             className="resize-handle top-resize"
             onMouseDown={(e) =>
-              resizeHandler(e, "top", containerRef, innerDivRef)
+              resizeHandler(
+                e,
+                "top",
+                containerRef,
+                innerDivRef,
+                setPosition,
+                position
+              )
             }
           ></div>
 
@@ -112,6 +137,7 @@ const Home = () => {
             ref={innerDivRef}
             id="inner-div"
             className="inner-div"
+            style={{ top: `${position.y}px`, left: `${position.x}px` }}
             onMouseDown={(e) =>
               handleDragInnerDiv(
                 e,
@@ -139,7 +165,7 @@ const Home = () => {
         </div>
       </div>
 
-      {isInnerDivHovered && 
+      {isInnerDivHovered && (
         <Tooltip
           handleMouseEnter={() =>
             handleMouseEnter(dragging, setTooltipVisible, setIsInnerDivHovered)
@@ -154,7 +180,7 @@ const Home = () => {
           tooltipVisible={tooltipVisible}
           isInnerDivHovered={isInnerDivHovered}
         />
-      }
+      )}
     </div>
   );
 };
