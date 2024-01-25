@@ -56,11 +56,9 @@ export const handleDragInnerDiv = (
       innerDivRef.current.style.left = x + "px";
       innerDivRef.current.style.top = y + "px";
 
-      setPosition({ x: x, y: y });
+      // setPosition({ x: x, y: y });
     }
   };
-
-  
 
   const handleDragEnd = () => {
     document.removeEventListener("mousemove", handleDragMove);

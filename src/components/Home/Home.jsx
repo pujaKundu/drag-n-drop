@@ -27,6 +27,9 @@ const Home = () => {
     resizeHandler(e, "bottom", containerRef, innerDivRef);
   };
 
+  // console.log("home ",innerDivRef.current.style.left, position.x)
+  
+
   return (
     <div>
       <div style={{
@@ -95,7 +98,7 @@ const Home = () => {
                 "bottom",
                 containerRef,
                 innerDivRef,
-                setPosition
+                setPosition,position
               )
             }
           ></div>
@@ -107,7 +110,7 @@ const Home = () => {
                 "left",
                 containerRef,
                 innerDivRef,
-                setPosition
+                setPosition,position
               )
             }
           ></div>
@@ -119,7 +122,7 @@ const Home = () => {
                 "top",
                 containerRef,
                 innerDivRef,
-                setPosition
+                setPosition,position
               )
             }
           ></div>
@@ -128,14 +131,14 @@ const Home = () => {
             ref={innerDivRef}
             id="inner-div"
             className="inner-div"
-            style={{ top: `${position.y}px`, left: `${position.x}px` }}
+            style={{ top: `${position.y}px`, left: `${position.x}px`}}
             onMouseDown={(e) =>
               handleDragInnerDiv(
                 e,
                 innerDivRef,
                 containerRef,
                 setTooltipVisible,
-                setPosition
+                setPosition,position
               )
             }
             onMouseEnter={() =>

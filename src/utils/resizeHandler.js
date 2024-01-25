@@ -5,7 +5,7 @@ export const resizeHandler = (
   direction,
   containerRef,
   innerDivRef,
-  setPosition
+  setPosition,position
 ) => {
   e.preventDefault();
 
@@ -25,7 +25,12 @@ export const resizeHandler = (
     };
   };
 
+  let  isResizing = true;
+
   const handleMouseMove =  (e) => {
+
+    if (!isResizing) return;
+
     const containerRect = containerRef?.current.getBoundingClientRect();
     const innerDivRect = innerDivRef?.current.getBoundingClientRect();
 
@@ -45,17 +50,17 @@ export const resizeHandler = (
       case "left":
         const newWidth = initialContainerRect.right - e.clientX;
 
-        if (newWidth >= innerDivRect.width && newWidth >= 100) {
+        if (newWidth >= innerDivRect.width && newWidth > 100) {
 
-          containerRef.current.style.willChange = "transform, width, left";
-          innerDivRef.current.style.willChange = "transform, width, left";
+          // containerRef.current.style.willChange = "transform, width, left";
+          // innerDivRef.current.style.willChange = "transform, width, left";
 
           containerRef.current.style.width = newWidth + "px";
           containerRef.current.style.left = `${e.clientX}px`;
 
-          if(containerRef.current.style.left - innerDivRef.current.style.left!==0){
-
-            const maxInnerDivX = containerRect.width - innerDivRect.width / 4;
+          if( containerRef.current.style.left - innerDivRef.current.style.left !== 0){
+            
+            const maxInnerDivX = (containerRect.width - innerDivRect.width / 3)+7;
 
             throttle(
               setPosition((prevItem) => ({
@@ -64,8 +69,9 @@ export const resizeHandler = (
               })),
               100
             );
+
+            // console.log(innerDivRef.current.style.left, position.x)
           }
-          
         }
 
         break;
@@ -83,15 +89,16 @@ export const resizeHandler = (
       case "top":
         const newHeight = initialContainerRect.bottom - e.clientY;
 
-        if (newHeight >= innerDivRect.height && newHeight >= 100) {
+        if (newHeight >= innerDivRect.height && newHeight > 100) {
 
-          containerRef.current.style.willChange = "height,top"
-          innerDivRef.current.style.willChange = "transform, height, top";
+          // containerRef.current.style.willChange = "height,top"
+          // innerDivRef.current.style.willChange = "transform, height, top";
 
           containerRef.current.style.height = newHeight + "px";
           containerRef.current.style.top = `${e.clientY}px`;
 
-          const maxInnerDivY = containerRect.height - innerDivRect.height/4;
+          if(isResizing && containerRef.current.style.top - innerDivRef.current.style.top!==0){
+            const maxInnerDivY = containerRect.height - innerDivRect.height/ 3;
           
             throttle(
               setPosition((prevItem) => ({
@@ -100,6 +107,8 @@ export const resizeHandler = (
               })),
               100
             );
+          }
+          
           
         }
 
@@ -129,10 +138,15 @@ export const resizeHandler = (
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
 
-    containerRef.current.style.willChange = "auto";
-    innerDivRef.current.style.willChange = "auto";
+    // containerRef.current.style.willChange = "auto";
+    // innerDivRef.current.style.willChange = "auto";
+
+    isResizing = false;
   };
 
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mouseup", handleMouseUp);
 };
+
+
+
