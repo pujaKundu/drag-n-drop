@@ -52,9 +52,6 @@ export const resizeHandler = (
 
         if (newWidth >= innerDivRect.width && newWidth > 100) {
 
-          // containerRef.current.style.willChange = "transform, width, left";
-          // innerDivRef.current.style.willChange = "transform, width, left";
-
           containerRef.current.style.width = newWidth + "px";
           containerRef.current.style.left = `${e.clientX}px`;
 
@@ -67,10 +64,8 @@ export const resizeHandler = (
                 ...prevItem,
                 x: Math.max(0, Math.min(prevItem.x - e.movementX, maxInnerDivX)),
               })),
-              100
+              50
             );
-
-            // console.log(innerDivRef.current.style.left, position.x)
           }
         }
 

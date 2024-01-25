@@ -27,8 +27,7 @@ const Home = () => {
     resizeHandler(e, "bottom", containerRef, innerDivRef);
   };
 
-  // console.log("home ",innerDivRef.current.style.left, position.x)
-  
+
 
   return (
     <div>
