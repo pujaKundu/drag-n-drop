@@ -28,18 +28,13 @@ const Home = () => {
   };
 
   return (
-    <div
-      style={{
+    <div>
+      <div style={{
         position: "absolute",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         top: "0",
         left: "0",
         margin: "20px",
-      }}
-    >
-      <div>
+      }}>
         <Selector setSelectedOption={setSelectedOption} />
         <div
           id="container"
@@ -88,8 +83,7 @@ const Home = () => {
                 "right",
                 containerRef,
                 innerDivRef,
-                setPosition,
-                position
+                setPosition
               )
             }
           ></div>
@@ -101,8 +95,7 @@ const Home = () => {
                 "bottom",
                 containerRef,
                 innerDivRef,
-                setPosition,
-                position
+                setPosition
               )
             }
           ></div>
@@ -114,8 +107,7 @@ const Home = () => {
                 "left",
                 containerRef,
                 innerDivRef,
-                setPosition,
-                position
+                setPosition
               )
             }
           ></div>
@@ -127,8 +119,7 @@ const Home = () => {
                 "top",
                 containerRef,
                 innerDivRef,
-                setPosition,
-                position
+                setPosition
               )
             }
           ></div>
@@ -163,9 +154,7 @@ const Home = () => {
             }
           ></div>
         </div>
-      </div>
-
-      {isInnerDivHovered && (
+        {isInnerDivHovered && (
         <Tooltip
           handleMouseEnter={() =>
             handleMouseEnter(dragging, setTooltipVisible, setIsInnerDivHovered)
@@ -181,6 +170,9 @@ const Home = () => {
           isInnerDivHovered={isInnerDivHovered}
         />
       )}
+      </div>
+
+     
     </div>
   );
 };

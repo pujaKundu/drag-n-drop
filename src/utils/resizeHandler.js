@@ -1,28 +1,31 @@
 import { useState } from "react";
 
-export const resizeHandler = (e, direction, containerRef, innerDivRef,setPosition,position) => {
+export const resizeHandler = (
+  e,
+  direction,
+  containerRef,
+  innerDivRef,
+  setPosition
+) => {
   e.preventDefault();
-
-  // console.log(position)
 
   const initialContainerRect = containerRef?.current.getBoundingClientRect();
   const initialInnerDivRect = innerDivRef?.current.getBoundingClientRect();
 
-  const debounce = (func, wait) => {
-    let timeout;
-
-    return function () {
-      if(timeout){
-        clearTimeout(timeout)
+  const throttle = (func, limit) => {
+    let inThrottle;
+    return function (...args) {
+      if (!inThrottle) {
+        func(...args);
+        inThrottle = true;
+        setTimeout(() => {
+          inThrottle = false;
+        }, limit);
       }
-      timeout = setTimeout(()=>{
-        func()
-      },wait)
     };
   };
 
-  const handleMouseMove = (e) => {
-
+  const handleMouseMove =  (e) => {
     const containerRect = containerRef?.current.getBoundingClientRect();
     const innerDivRect = innerDivRef?.current.getBoundingClientRect();
 
@@ -41,20 +44,30 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef,setPositio
 
       case "left":
         const newWidth = initialContainerRect.right - e.clientX;
-        
-        if (newWidth >= innerDivRect.width && newWidth>=100) {
+
+        if (newWidth >= innerDivRect.width && newWidth >= 100) {
+
+          containerRef.current.style.willChange = "transform, width, left";
+          innerDivRef.current.style.willChange = "transform, width, left";
+
           containerRef.current.style.width = newWidth + "px";
-          containerRef.current.style.left = `${e.clientX}px`  
+          containerRef.current.style.left = `${e.clientX}px`;
+
+          if(containerRef.current.style.left - innerDivRef.current.style.left!==0){
+
+            const maxInnerDivX = containerRect.width - innerDivRect.width / 4;
+
+            throttle(
+              setPosition((prevItem) => ({
+                ...prevItem,
+                x: Math.max(0, Math.min(prevItem.x - e.movementX, maxInnerDivX)),
+              })),
+              100
+            );
+          }
+          
         }
 
-        if (containerRect.left <= innerDivRect.left ) {
-          // console.log('left',position)
-          debounce(setPosition(prevItem => ({
-            ...prevItem,
-            x: Math.max(0,prevItem.x-e.movementX)
-          })),5000)
-        }
-        
         break;
 
       case "bottom":
@@ -70,19 +83,26 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef,setPositio
       case "top":
         const newHeight = initialContainerRect.bottom - e.clientY;
 
-        if (initialContainerRect.bottom >= innerDivRect.bottom && newHeight >= 100) {
+        if (newHeight >= innerDivRect.height && newHeight >= 100) {
+
+          containerRef.current.style.willChange = "height,top"
+          innerDivRef.current.style.willChange = "transform, height, top";
+
           containerRef.current.style.height = newHeight + "px";
           containerRef.current.style.top = `${e.clientY}px`;
+
+          const maxInnerDivY = containerRect.height - innerDivRect.height/4;
+          
+            throttle(
+              setPosition((prevItem) => ({
+                ...prevItem,
+                y: Math.max(0, Math.min(prevItem.y - e.movementY, maxInnerDivY)),
+              })),
+              100
+            );
+          
         }
 
-        if (containerRect.top <= innerDivRect.top) {
-          // console.log('left',position)
-          debounce(setPosition(prevItem=>({
-            ...prevItem,
-            y:Math.max(0,prevItem.y-e.movementY)
-          })),5000)
-        }
-        
         break;
 
       default:
@@ -102,14 +122,17 @@ export const resizeHandler = (e, direction, containerRef, innerDivRef,setPositio
         }
         break;
     }
+
   };
 
   const handleMouseUp = () => {
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
+
+    containerRef.current.style.willChange = "auto";
+    innerDivRef.current.style.willChange = "auto";
   };
 
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mouseup", handleMouseUp);
 };
-
