@@ -1,56 +1,54 @@
 export const updatedPosition = (
   selectedOption,
-  position,
-  containerRef,
-  containerRefBottom,
-  innerRefBottom
+  innerDivPosition,
+  containerRef
 ) => {
   switch (selectedOption) {
     case "top":
       return {
         top: `${
-          position.y >= 0 && position.y <= 60
-            ? position.y +
+          innerDivPosition.y >= 0 && innerDivPosition.y <= 60
+            ? innerDivPosition.y +
               (containerRef?.current?.getBoundingClientRect()?.top || 0) +
               60
-            : position.y +
+            : innerDivPosition.y +
               (containerRef?.current?.getBoundingClientRect()?.top || 0) -
               40
         }px`,
         left: `${
-          position.x +
+          innerDivPosition.x +
           (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
         }px`,
       };
     case "bottom":
       return {
         top: `${
-          containerRefBottom - innerRefBottom <= 100
-            ? position.y +
+          innerDivPosition.y >= 400 && innerDivPosition.y <= 600
+            ? innerDivPosition.y +
               (containerRef?.current?.getBoundingClientRect()?.top || 0) -
               40
-            : position.y +
+            : innerDivPosition.y +
               (containerRef?.current?.getBoundingClientRect()?.top || 0) +
               60
         }px`,
         left: `${
-          position.x +
+          innerDivPosition.x +
           (containerRef?.current?.getBoundingClientRect()?.left - 5 || 0)
         }px`,
       };
     case "left":
       return {
         top: `${
-          position.y +
+          innerDivPosition.y +
           (containerRef?.current?.getBoundingClientRect()?.top || 0) +
           10
         }px`,
         left: `${
-          position.x >= 0 && position.x <= 110
-            ? position.x +
+          innerDivPosition.x >= 0 && innerDivPosition.x <= 110
+            ? innerDivPosition.x +
               (containerRef?.current?.getBoundingClientRect()?.left || 0) +
               120
-            : position.x +
+            : innerDivPosition.x +
               (containerRef?.current?.getBoundingClientRect()?.left || 0) -
               120
         }px`,
@@ -58,16 +56,16 @@ export const updatedPosition = (
     case "right":
       return {
         top: `${
-          position.y +
+          innerDivPosition.y +
           (containerRef?.current?.getBoundingClientRect()?.top || 0) +
           10
         }px`,
         left: `${
-          position.x >= 400 && position.x <= 505
-            ? position.x +
+          innerDivPosition.x >= 400 && innerDivPosition.x <= 505
+            ? innerDivPosition.x +
               (containerRef?.current?.getBoundingClientRect()?.left || 0) -
               120
-            : position.x +
+            : innerDivPosition.x +
               (containerRef?.current?.getBoundingClientRect()?.left || 0) +
               120
         }px`,

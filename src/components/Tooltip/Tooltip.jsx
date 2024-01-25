@@ -1,41 +1,24 @@
 import { createPortal } from "react-dom";
 import { updatedPosition } from "../../utils/positionCalculation";
 
-const Tooltip = ({
-  handleMouseEnter,
-  handleMouseLeave,
-  selectedOption,
-  position,
-  containerRef,
-  innerDivRef,
-  tooltipVisible,
-  isInnerDivHovered,
-}) => {
-  const containerRefBottom =
-    containerRef?.current?.getBoundingClientRect().bottom;
-  const innerRefBottom = innerDivRef?.current?.getBoundingClientRect().bottom;
-
-  const tooltipStyle = {
-    ...updatedPosition(
-      selectedOption,
-      position,
-      containerRef,
-      containerRefBottom,
-      innerRefBottom
-    ),
-    display:  isInnerDivHovered ? "block" : "none",
+const Tooltip = ({ innerDivPosition, selectedOption, containerRef }) => {
+  let tooltipStyle = {
+    ...updatedPosition(selectedOption, innerDivPosition, containerRef),
+    position: "absolute",
+    backgroundColor: "rgb(72, 72, 82)",
+    color: "#ffffff",
+    padding: "5px",
+    borderRadius: "5px",
+    width: "50px",
+    height: "20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   };
-  
-  return (
-    createPortal(<div
-      className={`tooltip `}
-      style={tooltipStyle}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      This is tooltip
-    </div>,document.body)
-  );
+
+  return containerRef.current
+    ? createPortal(<div style={tooltipStyle}>Heyyy!</div>, document.body)
+    : null;
 };
 
 export default Tooltip;
